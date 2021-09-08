@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: Roblox-TS Roact Components
+# key: rbxtsroactcomponent
+# --
+
+import Roact from "@rbxts/roact";
+
+interface ComponentProps {
+}
+
+export default class ${1:default ComponentName} extends Roact.Component<ComponentProps> {
+  didOpenFirstPrompt: boolean;
+
+  constructor(props: ComponentProps) {
+    super(props);
+  }
+
+  render() {
+    return (
+      $2
+    );
+  }
+}

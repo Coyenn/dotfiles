@@ -39,7 +39,7 @@
 ;----------------------------------------------------------------
 
 ;; theme
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-xcode)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -74,6 +74,16 @@
 (map! :leader
       :desc "Toggle Treemacs"
       "o e" #'treemacs)
+
+;; SX Search
+(map! :leader
+      :desc "StackOverflow search"
+      "o s" #'sx-search)
+
+;; LSP
+(map! :leader
+      :desc "Goto Definition"
+      "o D" #'evil-goto-definition)
 
 (map!
  (:prefix "g"
