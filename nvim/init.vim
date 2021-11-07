@@ -6,10 +6,17 @@ set nocompatible
 set encoding=UTF-8
 set guifont=Hack\ Nerd\ Font
 
-"Automatically download vim-plug if it is not installed
+"Automatically download vim-plug if it is not installed in vim
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+"Automatically download vim-plug if it is not installed in neovim
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+    silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 " Run PlugInstall if there are missing plugins
