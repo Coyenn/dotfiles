@@ -5,6 +5,16 @@ endif
 set nocompatible
 set encoding=UTF-8
 set guifont=Hack\ Nerd\ Font
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set ai
+set number
+set hlsearch
+set ruler
+
+highlight Comment ctermfg=green
+syntax on
 
 "Automatically download vim-plug if it is not installed in neovim
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
@@ -13,7 +23,7 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" Run PlugInstall if there are missing plugins
+"Run PlugInstall if there are missing plugins
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
@@ -81,17 +91,6 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 
-"Geohotz config
-syntax on
-set tabstop=2
-set shiftwidth=2
-set expandtab
-set ai
-set number
-set hlsearch
-set ruler
-highlight Comment ctermfg=green
-
 "Highlight the symbol and its references on cursor hold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
@@ -101,7 +100,7 @@ let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-css', 'co
 "Enable NERDTree
 let g:webdevicons_enable_nerdtree = 1
 
-"Custom Header on Startup page
+"Custom Header ASCII-Art on Startup page
 let s:header = [
 \ '',
 \ '      ____________',
@@ -118,6 +117,7 @@ let s:header = [
 \ '    \  / /______\/ /',
 \ '     \/___________/',
 \ '',
+\ 'Gruvbox Vim - by Tim Ritter'
 \ ]
 
 let s:footer = []
