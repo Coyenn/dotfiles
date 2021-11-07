@@ -6,12 +6,6 @@ set nocompatible
 set encoding=UTF-8
 set guifont=Hack\ Nerd\ Font
 
-"Automatically download vim-plug if it is not installed in vim
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
 "Automatically download vim-plug if it is not installed in neovim
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
@@ -37,9 +31,6 @@ Plug 'ryanoasis/vim-devicons' "Icons for files in NERDTree
 Plug 'kyazdani42/nvim-web-devicons' "Recommended (for coloured cons)
 Plug 'vwxyutarooo/nerdtree-devicons-syntax' "Icon Colors for NERDTree
 
-"Formatters
-Plug 'maxmellon/vim-jsx-pretty'
-
 "Languages
 Plug 'sheerun/vim-polyglot' "Language pack for syntax and intendation
 Plug 'pangloss/vim-javascript'
@@ -49,7 +40,9 @@ Plug 'leafgarland/typescript-vim'
 Plug 'camspiers/animate.vim' "Animate windows
 Plug 'raimondi/delimitmate' "Auto close brackets etc
 Plug 'mattn/emmet-vim' "Emmet support
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+
+"Autocompletion
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "Telescope
 Plug 'nvim-lua/plenary.nvim'
@@ -99,9 +92,11 @@ set hlsearch
 set ruler
 highlight Comment ctermfg=green
 
-"Auto Format
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
+"Highlight the symbol and its references on cursor hold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+"Coc extensions
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh']
 
 "Enable NERDTree
 let g:webdevicons_enable_nerdtree = 1
