@@ -39,7 +39,7 @@
 ;----------------------------------------------------------------
 
 ;; theme
-(setq doom-theme 'doom-xcode)
+(setq doom-theme 'doom-gruvbox)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
