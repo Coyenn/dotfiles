@@ -33,7 +33,7 @@ call plug#begin('~/.vim/plugged')
 
 "Gui
 Plug 'mhinz/vim-startify' "Startup ASCII-Art
-Plug 'sainnhe/gruvbox-material' "Color scheme
+Plug 'projekt0n/github-nvim-theme' "Color Theme
 Plug 'scrooloose/nerdtree' "File tree
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -65,7 +65,7 @@ call plug#end()
 let g:airline#extensions#tabline#enabled = 1
 
 "Set the colorscheme
-colorscheme gruvbox-material
+colorscheme github_dark_default
 
 "Set airline theme
 let g:airline_theme='transparent'
@@ -95,7 +95,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 "Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua']
 
 "Enable NERDTree
 let g:webdevicons_enable_nerdtree = 1
