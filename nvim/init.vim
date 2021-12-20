@@ -12,6 +12,7 @@ set ai
 set number
 set hlsearch
 set ruler
+set nowrap
 
 highlight Comment ctermfg=green
 syntax on
@@ -40,11 +41,10 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons' "Icons for files in NERDTree
 Plug 'kyazdani42/nvim-web-devicons' "Recommended (for coloured cons)
 Plug 'vwxyutarooo/nerdtree-devicons-syntax' "Icon Colors for NERDTree
+Plug 'folke/which-key.nvim'
 
 "Languages
 Plug 'sheerun/vim-polyglot' "Language pack for syntax and intendation
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
 
 "Utility
 Plug 'camspiers/animate.vim' "Animate windows
@@ -57,6 +57,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Telescope
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+
+"Flotaing Terminal
+Plug 'voldikss/vim-floaterm'
 
 "Initialize plugin system
 call plug#end()
@@ -71,7 +74,8 @@ colorscheme github_dark_default
 let g:airline_theme='transparent'
 
 "Key bindings
-let mapleader = "\<Space>" "Set leader to space
+nnoremap <SPACE> <Nop>
+map <Space> <Leader>
 
 "Animate Window size on direction key press
 nnoremap <silent> <Up> :call animate#window_delta_height(10)<CR>
@@ -83,6 +87,8 @@ nnoremap <silent> <Left> :call animate#window_delta_width(-10)<CR>
 :tnoremap <Esc> <C-\><C-n>
 nnoremap <D-v> "+p
 
+:nnoremap <Leader>w <C-w>
+
 "Tab should expand emment abbreviations
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 
@@ -91,44 +97,59 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 
+nnoremap <silent> <Leader>t :FloatermToggle<CR>
+
+"Enable which key
+lua << EOF
+  require("which-key").setup {}
+EOF
+
 "Highlight the symbol and its references on cursor hold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 "Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua']
+let g:coc_global_extensions = ['coc-json', 'coc-sourcekit', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua']
+
+"Max autocomplete window height
+set pumheight=20
 
 "Enable NERDTree
 let g:webdevicons_enable_nerdtree = 1
 
-"Custom Header ASCII-Art on Startup page
-let s:header = [
-\ '',
-\ '      ____________',
-\ '     /\  ________ \',
-\ '    /  \ \______/\ \',
-\ '   / /\ \ \  / /\ \ \',
-\ '  / / /\ \ \/ / /\ \ \',
-\ ' / / /__\_\/ / /__\_\ \',
-\ '/ /_/_______/ /________\',
-\ '\ \ \______ \ \______  /',
-\ ' \ \ \  / /\ \ \  / / /',
-\ '  \ \ \/ / /\ \ \/ / /',
-\ '   \ \/ / /__\_\/ / /',
-\ '    \  / /______\/ /',
-\ '     \/___________/',
-\ '',
-\ 'Gruvbox Vim - by Tim Ritter'
-\ ]
+call coc#config("suggest.completionItemKindLabels", {
+      \   "keyword": "\uf1de",
+      \   "variable": "\ue79b",
+      \   "value": "\uf89f",
+      \   "operator": "\u03a8",
+      \   "function": "\u0192",
+      \   "reference": "\ufa46",
+      \   "constant": "\uf8fe",
+      \   "method": "\uf09a",
+      \   "struct": "\ufb44",
+      \   "class": "\uf0e8",
+      \   "interface": "\uf417",
+      \   "text": "\ue612",
+      \   "enum": "\uf435",
+      \   "enumMember": "\uf02b",
+      \   "module": "\uf40d",
+      \   "color": "\ue22b",
+      \   "property": "\ue624",
+      \   "field": "\uf9be",
+      \   "unit": "\uf475",
+      \   "event": "\ufacd",
+      \   "file": "\uf723",
+      \   "folder": "\uf114",
+      \   "snippet": "\ue60b",
+      \   "typeParameter": "\uf728",
+      \   "default": "\uf29c"
+      \ })
 
-let s:footer = []
+" Auto start NERD tree when opening a directory
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'Telescope find_files' | wincmd p | ene | wincmd p | endif
 
-"Function for centering the ASCII Art
-function! s:center(lines) abort
-  let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-  let centered_lines = map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-  return centered_lines
-endfunction
+" Auto start NERD tree if no files are specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | exe 'Telescope find_files' | endif
 
-let g:startify_custom_header = s:center(s:header)
-let g:startify_custom_footer = s:center(s:footer)
+" Let quit work as expected if after entering :q the only window left open is NERD Tree itself
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
