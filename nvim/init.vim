@@ -61,6 +61,12 @@ Plug 'nvim-telescope/telescope.nvim'
 "Flotaing Terminal
 Plug 'voldikss/vim-floaterm'
 
+"Snippets
+Plug 'mlaursen/vim-react-snippets'
+
+"Formatter
+Plug 'sbdchd/neoformat'
+
 "Initialize plugin system
 call plug#end()
 
@@ -77,17 +83,25 @@ let g:airline_theme='transparent'
 nnoremap <SPACE> <Nop>
 map <Space> <Leader>
 
+"Super+s to save
+:nmap <Leader>s :w<CR>
+:imap <Leader>s <Esc>:w<CR>a
+
+"jj to escape
+:imap jj <Esc>
+"Escape should also get you out of terminal mode
+:tnoremap <Esc> <C-\><C-n>
+nnoremap <D-v> "+p
+
+:nnoremap <Leader>w <C-w>
+
 "Animate Window size on direction key press
 nnoremap <silent> <Up> :call animate#window_delta_height(10)<CR>
 nnoremap <silent> <Down> :call animate#window_delta_height(-10)<CR>
 nnoremap <silent> <Right> :call animate#window_delta_width(10)<CR>
 nnoremap <silent> <Left> :call animate#window_delta_width(-10)<CR>
 
-:imap jj <Esc>
-:tnoremap <Esc> <C-\><C-n>
-nnoremap <D-v> "+p
-
-:nnoremap <Leader>w <C-w>
+nnoremap <Leader>fe :Neoformat<CR>
 
 "Tab should expand emment abbreviations
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
@@ -96,8 +110,21 @@ imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>n <cmd>NERDTreeToggle<cr>
 
+"Toggle the floating Terminal
 nnoremap <silent> <Leader>t :FloatermToggle<CR>
+
+"Tab binds
+nnoremap gt <cmd>bnext<cr>
+nnoremap gT <cmd>bprevious<cr>
+nnoremap <leader>bk <cmd>bdelete!<cr>
+
+"Move multiple lines at once
+noremap <Up> 10k
+noremap <Down> 10j
+noremap <Left> 10h
+noremap <Right> 10l
 
 "Enable which key
 lua << EOF
@@ -108,7 +135,7 @@ EOF
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 "Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-sourcekit', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua']
+let g:coc_global_extensions = ['coc-json', 'coc-sourcekit', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua', 'coc-snippets']
 
 "Max autocomplete window height
 set pumheight=20
@@ -144,12 +171,26 @@ call coc#config("suggest.completionItemKindLabels", {
       \   "default": "\uf29c"
       \ })
 
-" Auto start NERD tree when opening a directory
+"Auto start Telescope when opening a directory
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'Telescope find_files' | wincmd p | ene | wincmd p | endif
 
-" Auto start NERD tree if no files are specified
+"Auto start Telescop if no files are specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | exe 'Telescope find_files' | endif
 
-" Let quit work as expected if after entering :q the only window left open is NERD Tree itself
+"Let quit work as expected if after entering :q the only window left open is NERD Tree itself
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+"Autocomplete snippets and coc using Tab
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
