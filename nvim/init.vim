@@ -17,7 +17,7 @@ set nowrap
 highlight Comment ctermfg=green
 syntax on
 
-"Automatically download vim-plug if it is not installed in neovim
+"Automatically download vim-plug
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
     silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -35,12 +35,10 @@ call plug#begin('~/.vim/plugged')
 "Gui
 Plug 'mhinz/vim-startify' "Startup ASCII-Art
 Plug 'projekt0n/github-nvim-theme' "Color Theme
-Plug 'scrooloose/nerdtree' "File tree
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons' "Icons for files in NERDTree
 Plug 'kyazdani42/nvim-web-devicons' "Recommended (for coloured cons)
-Plug 'vwxyutarooo/nerdtree-devicons-syntax' "Icon Colors for NERDTree
 Plug 'folke/which-key.nvim'
 
 "Languages
@@ -48,7 +46,6 @@ Plug 'sheerun/vim-polyglot' "Language pack for syntax and intendation
 
 "Utility
 Plug 'camspiers/animate.vim' "Animate windows
-Plug 'raimondi/delimitmate' "Auto close brackets etc
 Plug 'mattn/emmet-vim' "Emmet support
 
 "Autocompletion
@@ -64,8 +61,8 @@ Plug 'voldikss/vim-floaterm'
 "Snippets
 Plug 'mlaursen/vim-react-snippets'
 
-"Formatter
-Plug 'sbdchd/neoformat'
+"Indentlines
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 "Initialize plugin system
 call plug#end()
@@ -79,69 +76,48 @@ colorscheme github_dark_default
 "Set airline theme
 let g:airline_theme='transparent'
 
-"Key bindings
-nnoremap <SPACE> <Nop>
+"Leader key is space
 map <Space> <Leader>
 
-"Super+s to save
-:nmap <Leader>s :w<CR>
-:imap <Leader>s <Esc>:w<CR>a
+"Leader w for window control
+nnoremap <Leader>w <C-w>
 
-"jj to escape
+"jj and esc to enter normal mode
 :imap jj <Esc>
-"Escape should also get you out of terminal mode
-:tnoremap <Esc> <C-\><C-n>
-nnoremap <D-v> "+p
-
-:nnoremap <Leader>w <C-w>
+tnoremap <Esc> <C-\><C-n>
 
 "Animate Window size on direction key press
-nnoremap <silent> <Up> :call animate#window_delta_height(10)<CR>
-nnoremap <silent> <Down> :call animate#window_delta_height(-10)<CR>
-nnoremap <silent> <Right> :call animate#window_delta_width(10)<CR>
-nnoremap <silent> <Left> :call animate#window_delta_width(-10)<CR>
+nnoremap <silent> <Down> :call animate#window_delta_height(10)<CR>
+nnoremap <silent> <Up> :call animate#window_delta_height(-10)<CR>
+nnoremap <silent> <Left> :call animate#window_delta_width(10)<CR>
+nnoremap <silent> <Right> :call animate#window_delta_width(-10)<CR>
 
-nnoremap <Leader>fe :Neoformat<CR>
-
-"Tab should expand emment abbreviations
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
-
-"Telescope binds
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>ff <cmd>Telescope find_files hidden=true<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep hidden=true<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>n <cmd>NERDTreeToggle<cr>
+nnoremap <Leader>t <cmd>FloatermToggle<cr>
+nnoremap <Leader>s <cmd>w<cr>
+nnoremap <leader>p <cmd>CocCommand prettier.formatFile<cr>
 
-"Toggle the floating Terminal
-nnoremap <silent> <Leader>t :FloatermToggle<CR>
-
-"Tab binds
+"Buffer binds
 nnoremap gt <cmd>bnext<cr>
 nnoremap gT <cmd>bprevious<cr>
 nnoremap <leader>bk <cmd>bdelete!<cr>
 
-"Move multiple lines at once
-noremap <Up> 10k
-noremap <Down> 10j
-noremap <Left> 10h
-noremap <Right> 10l
-
-"Enable which key
-lua << EOF
-  require("which-key").setup {}
-EOF
+"Press shift to move multiple lines at once
+nnoremap <S-k> 10k
+nnoremap <S-j> 10j
+nnoremap <S-h> 10h
+nnoremap <S-l> 10l
 
 "Highlight the symbol and its references on cursor hold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 "Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-sourcekit', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua', 'coc-snippets']
+let g:coc_global_extensions = ['coc-json', 'coc-sourcekit', 'coc-git', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-markdownlint', 'coc-psalm', 'coc-sh', 'coc-go', 'coc-lua', 'coc-snippets', 'coc-highlight', 'coc-pairs', 'coc-prettier', 'coc-spell-checker']
 
 "Max autocomplete window height
 set pumheight=20
-
-"Enable NERDTree
-let g:webdevicons_enable_nerdtree = 1
 
 call coc#config("suggest.completionItemKindLabels", {
       \   "keyword": "\uf1de",
@@ -174,12 +150,9 @@ call coc#config("suggest.completionItemKindLabels", {
 "Auto start Telescope when opening a directory
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'Telescope find_files' | wincmd p | ene | wincmd p | endif
 
-"Auto start Telescop if no files are specified
+"Auto start Telescope if no files are specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | exe 'Telescope find_files' | endif
-
-"Let quit work as expected if after entering :q the only window left open is NERD Tree itself
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 "Autocomplete snippets and coc using Tab
 inoremap <silent><expr> <TAB>
@@ -194,3 +167,8 @@ function! s:check_back_space() abort
 endfunction
 
 let g:coc_snippet_next = '<tab>'
+
+"Enable which key and NvimTree
+lua << EOF
+  require("which-key").setup {}
+EOF
