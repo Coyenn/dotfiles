@@ -1,4 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;----------------------------------------------------------------
+;----------------------------------------------------------------
 ;             __                  __
 ;            ( _)                ( _)
 ;           / / \\              / /\_\_
@@ -38,8 +40,8 @@
 ;----------------------------------------------------------------
 ;----------------------------------------------------------------
 
-;; theme
-(setq doom-theme 'doom-gruvbox)
+;; Theme
+(setq doom-theme 'doom-monokai-machine)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -52,16 +54,16 @@
 (setq user-full-name "Tim Ritter"
       user-mail-address "t-ritter-mail@web.de")
 
-;; enable auto save by default
+;; Enable auto save by default
 (setq auto-save-default t)
 
-;; disable exit confirmation
+;; Disable exit confirmation
 (setq confirm-kill-emacs nil)
 
-;; disable kill processes confirmation
+;; Disable kill processes confirmation
 (setq confirm-kill-processes nil)
 
-;; maximize window on startup
+;; Maximize window on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 ;; Set Font
@@ -111,3 +113,6 @@
 
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook 'delete-other-windows)
+
+;; Escape evil insert mode with jj
+(setq evil-escape-key-sequence "jj")
