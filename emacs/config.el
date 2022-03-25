@@ -41,7 +41,7 @@
 ;----------------------------------------------------------------
 
 ;; Theme
-(setq doom-theme 'doom-monokai-machine)
+(setq doom-theme 'doom-henna)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -67,7 +67,7 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
 ;; Set Font
-(setq doom-font (font-spec :family "Fira Code" :size 15 :slant 'normal :weight 'normal))
+(setq doom-font (font-spec :family "Fira Code" :size 16 :slant 'normal :weight 'normal))
 
 ;; Makes *scratch* empty.
 (setq initial-scratch-message "")
@@ -82,19 +82,16 @@
       :desc "StackOverflow search"
       "o s" #'sx-search)
 
-;; LSP
+;; Goto definition
 (map! :leader
       :desc "Goto Definition"
       "o D" #'evil-goto-definition)
 
-(map!
- (:prefix "g"
-   (:prefix "s"
-     :nv "l" #'avy-goto-word-0)))
 ;; Removes *scratch* from buffer after the mode has been set.
 (defun remove-scratch-buffer ()
   (if (get-buffer "*scratch*")
       (kill-buffer "*scratch*")))
+
 (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
 ;; Removes *messages* from the buffer.
@@ -113,6 +110,3 @@
 
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook 'delete-other-windows)
-
-;; Escape evil insert mode with jj
-(setq evil-escape-key-sequence "jj")
