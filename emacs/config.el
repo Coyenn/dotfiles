@@ -40,37 +40,68 @@
 ;----------------------------------------------------------------
 ;----------------------------------------------------------------
 
-;; Theme
-(setq doom-theme 'doom-henna)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/.org/")
-
-;; relative | nil
-(setq display-line-numbers-type t)
+;----------------------------------------------------------------
+; PERSONAL
+;----------------------------------------------------------------
 
 ;; Set my name and email
 (setq user-full-name "Tim Ritter"
       user-mail-address "t-ritter-mail@web.de")
 
+;----------------------------------------------------------------
+; BEHAVIOUR
+;----------------------------------------------------------------
+
+;; Org stores its files in this directory
+(setq org-directory "~/.org/")
+
 ;; Enable auto save by default
 (setq auto-save-default t)
 
-;; Disable exit confirmation
+;; Disable various kill confirmations
 (setq confirm-kill-emacs nil)
-
-;; Disable kill processes confirmation
 (setq confirm-kill-processes nil)
 
 ;; Maximize window on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-;; Set Font
+;; Show only one active window when opening multiple files at the same time.
+(add-hook 'window-setup-hook 'delete-other-windows)
+
+;; Remove *scratch* from buffer after the mode has been set
+(defun remove-scratch-buffer ()
+  (if (get-buffer "*scratch*")
+      (kill-buffer "*scratch*")))
+
+(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+
+;; Remove *messages* buffer
+(setq-default message-log-max nil)
+(kill-buffer "*Messages*")
+
+;; Remove *Completions* buffer
+(add-hook 'minibuffer-exit-hook
+      '(lambda ()
+         (let ((buffer "*Completions*"))
+           (and (get-buffer buffer)
+                (kill-buffer buffer)))))
+
+;; Don't show *Buffer list* when opening multiple files at the same time.
+(setq inhibit-startup-buffer-menu t)
+
+;----------------------------------------------------------------
+; VISUAL
+;----------------------------------------------------------------
+
+;; Theme
+(setq doom-theme 'doom-dark+)
+
+;; Font
 (setq doom-font (font-spec :family "Fira Code" :size 16 :slant 'normal :weight 'normal))
 
-;; Makes *scratch* empty.
-(setq initial-scratch-message "")
+;----------------------------------------------------------------
+; KEYBINDINGS
+;----------------------------------------------------------------
 
 ;; Add keybinding for treemacs
 (map! :leader
@@ -87,26 +118,12 @@
       :desc "Goto Definition"
       "o D" #'evil-goto-definition)
 
-;; Removes *scratch* from buffer after the mode has been set.
-(defun remove-scratch-buffer ()
-  (if (get-buffer "*scratch*")
-      (kill-buffer "*scratch*")))
+;; jj to get back into normal mode
+(setq-default evil-escape-key-sequence "jj")
 
-(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+;----------------------------------------------------------------
+; PACKAGES
+;----------------------------------------------------------------
 
-;; Removes *messages* from the buffer.
-(setq-default message-log-max nil)
-(kill-buffer "*Messages*")
-
-;; Removes *Completions* from buffer after you've opened a file.
-(add-hook 'minibuffer-exit-hook
-      '(lambda ()
-         (let ((buffer "*Completions*"))
-           (and (get-buffer buffer)
-                (kill-buffer buffer)))))
-
-;; Don't show *Buffer list* when opening multiple files at the same time.
-(setq inhibit-startup-buffer-menu t)
-
-;; Show only one active window when opening multiple files at the same time.
-(add-hook 'window-setup-hook 'delete-other-windows)
+;; TailwindCSS
+(use-package! lsp-tailwindcss)
