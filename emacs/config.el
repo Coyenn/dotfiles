@@ -34,8 +34,9 @@
 ;
 ; My Doom Emacs config.
 ;
-; To reload the config, just restart or M-x doom/reload.
-; Update packages according to the config using doom sync.
+; To reload the config, just restart or M-x doom/restart.
+; Update packages according to the config using doom sync
+; or M-x doom/reload and then M-x doom/restart.
 ;
 ;----------------------------------------------------------------
 ;----------------------------------------------------------------
