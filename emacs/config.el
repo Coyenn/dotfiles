@@ -63,6 +63,9 @@
 (setq confirm-kill-emacs nil)
 (setq confirm-kill-processes nil)
 
+;; No delay for displaying auto completions
+(setq company-idle-delay 0)
+
 ;; Maximize window on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
@@ -78,6 +81,8 @@
 
 ;; Font
 (setq doom-font (font-spec :family "Fira Code" :size 16 :slant 'normal :weight 'normal))
+
+(setq +zen-text-scale 1)
 
 ;----------------------------------------------------------------
 ; KEYBINDINGS
@@ -107,3 +112,15 @@
 
 ;; TailwindCSS
 (use-package! lsp-tailwindcss)
+
+;; Tree Sitter for better syntax highlighting
+(use-package! tree-sitter
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+;; Ctrl-F to search
+(use-package! ctrlf
+  :hook
+  (after-init . ctrlf-mode))
