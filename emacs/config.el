@@ -87,10 +87,6 @@
 ; Enable time in the mode-line
 (display-time-mode 1)
 
-; Display power usage on laptops
-(unless (string-match-p "^Power N/A" (battery))
-  (display-battery-mode 1))
-
 ; Iterate through CamelCase words
 (global-subword-mode 1)
 
@@ -104,7 +100,18 @@
 ; Font
 (setq doom-font (font-spec :family "Fira Code" :size 16 :slant 'normal :weight 'normal))
 
+; Zen Mode text scale
 (setq +zen-text-scale 1)
+
+; Centaur Tabs
+(after! centaur-tabs
+  (centaur-tabs-mode -1)
+  (setq centaur-tabs-height 40
+        centaur-tabs-set-icons t
+        centaur-tabs-modified-marker "o"
+        centaur-tabs-close-button "×"
+        centaur-tabs-set-bar 'above
+        centaur-tabs-gray-out-icons 'buffer))
 
 ;----------------------------------------------------------------
 ; KEYBINDINGS
@@ -126,10 +133,10 @@
       "o D" #'evil-goto-definition)
 
 ; Scroll half a page down
-(map! "S-j" #'evil-scroll-down)
+(map! "C-j" #'evil-scroll-down)
 
 ; Scroll half a page up
-(map! "S-k" #'evil-scroll-up)
+(map! "C-k" #'evil-scroll-up)
 
 ; jj to get back into normal mode
 (setq-default evil-escape-key-sequence "jj")
