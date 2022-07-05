@@ -5,11 +5,28 @@ cd "$(dirname "$0")"
 
 if [ "$(uname)" == "Darwin" ]; then
   echo "Running Doom Emacs installation for OSX based system"
-  echo "Adding brew cask"
-  brew cask install emacs #is the preferred from emacs wiki
+  echo "Cleaning removing any existing configurations on your system"
+  {
+    {
+      rm -rf ~/.emacs.d
+    } || {
+      printf ""
+    }
 
-  echo "Installing from cask"
-  brew install --cask emacs #using new cask syntax
+    echo "Removed existing emacs.d"
+
+    rm -rf ~/.doom.d
+    echo "Removed existing doom.d"
+  } || {
+    echo "Did not find any existing configurations"
+  }
+
+  {
+    echo "Installing Emacs-Plus (v28) via Brew"
+    brew tap d12frosted/emacs-plus && brew install emacs-plus@28 && ln -s /opt/homebrew/opt/emacs-plus@28/Emacs.app /Applications
+  } || {
+    printf ""
+  }
 
   echo "Cloning Doom Emacs"
   git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
@@ -19,7 +36,7 @@ if [ "$(uname)" == "Darwin" ]; then
 
   echo "Installing config"
   mkdir -p ~/.doom.d
-  cp -r ../doom-emacs/* ~/.doom.d
+  cp -r ./* ~/.doom.d
 
   echo "Installing Doom Emacs packages"
   ~/.emacs.d/bin/doom sync

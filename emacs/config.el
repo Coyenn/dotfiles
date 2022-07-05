@@ -1,4 +1,4 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 ;----------------------------------------------------------------
 ;----------------------------------------------------------------
 ;             __                  __
@@ -45,7 +45,7 @@
 ; PERSONAL
 ;----------------------------------------------------------------
 
-;; Set my name and email
+; Set my name and email
 (setq user-full-name "Tim Ritter"
       user-mail-address "t-ritter-mail@web.de")
 
@@ -53,33 +53,55 @@
 ; BEHAVIOUR
 ;----------------------------------------------------------------
 
-;; Org stores its files in this directory
+; Much of this is taken from:
+; https://tecosaur.github.io/emacs-config/config.html#rudimentary-configuration
+
+(setq-default
+ delete-by-moving-to-trash t    ; Delete files to trash
+ window-combination-resize t    ; take new window space from all other windows (not just current)
+ x-stretch-cursor t)            ; Stretch cursor to the glyph width
+
+(setq undo-limit 80000000               ; Raise undo-limit to 80Mb
+      evil-want-fine-undo t             ; By default while in insert all changes are one big blob. Be more granular
+      auto-save-default t               ; Nobody likes to loose work, I certainly don't
+      truncate-string-ellipsis "…"      ; Unicode ellispis are nicer than "...", and also save /precious/ space
+      password-cache-expiry nil         ; I can trust my computers ... can't I?
+      scroll-margin 2)                  ; It's nice to maintain a little margin
+
+; Org stores its files in this directory
 (setq org-directory "~/.org/")
 
-;; Enable auto save by default
-(setq auto-save-default t)
-
-;; Disable various kill confirmations
+; Disable various kill confirmations
 (setq confirm-kill-emacs nil)
 (setq confirm-kill-processes nil)
 
-;; No delay for displaying auto completions
+; No delay for displaying auto completions
 (setq company-idle-delay 0)
 
-;; Maximize window on startup
+; Maximize window on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-;; Show only one active window when opening multiple files at the same time.
+; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook 'delete-other-windows)
+
+; Enable time in the mode-line
+(display-time-mode 1)
+
+; Display power usage on laptops
+(unless (string-match-p "^Power N/A" (battery))
+  (display-battery-mode 1))
+
+; Iterate through CamelCase words
+(global-subword-mode 1)
 
 ;----------------------------------------------------------------
 ; VISUAL
 ;----------------------------------------------------------------
 
-;; Theme
-(setq doom-theme 'doom-dark+)
+; Theme
+(setq doom-theme 'doom-tokyo-night)
 
-;; Font
+; Font
 (setq doom-font (font-spec :family "Fira Code" :size 16 :slant 'normal :weight 'normal))
 
 (setq +zen-text-scale 1)
@@ -88,39 +110,45 @@
 ; KEYBINDINGS
 ;----------------------------------------------------------------
 
-;; Add keybinding for treemacs
+; Add keybinding for treemacs
 (map! :leader
       :desc "Toggle Treemacs"
       "o e" #'treemacs)
 
-;; SX Search
+; SX Search
 (map! :leader
       :desc "StackOverflow search"
       "o s" #'sx-search)
 
-;; Goto definition
+; Goto definition
 (map! :leader
       :desc "Goto Definition"
       "o D" #'evil-goto-definition)
 
-;; jj to get back into normal mode
+; Scroll half a page down
+(map! "S-j" #'evil-scroll-down)
+
+; Scroll half a page up
+(map! "S-k" #'evil-scroll-up)
+
+; jj to get back into normal mode
 (setq-default evil-escape-key-sequence "jj")
 
 ;----------------------------------------------------------------
 ; PACKAGES
 ;----------------------------------------------------------------
 
-;; TailwindCSS
+; TailwindCSS
 (use-package! lsp-tailwindcss)
 
-;; Tree Sitter for better syntax highlighting
+; Tree Sitter for better syntax highlighting
 (use-package! tree-sitter
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-;; Ctrl-F to search
+; Ctrl-F to search
 (use-package! ctrlf
   :hook
   (after-init . ctrlf-mode))
