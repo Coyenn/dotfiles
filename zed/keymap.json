@@ -1,0 +1,76 @@
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      // Custom bindings
+      "ctrl-c": "editor::Copy",
+      "ctrl-x": "editor::Cut",
+      "ctrl-v": "editor::Paste",
+      "ctrl-y": "editor::Undo",
+      "ctrl-f": "buffer_search::Deploy",
+      "ctrl-o": "workspace::Open",
+      "ctrl-a": "editor::SelectAll",
+      "ctrl-j": "terminal_panel::ToggleFocus",
+      "ctrl-s": "workspace::Save",
+      "ctrl-w": "pane::CloseActiveItem",
+
+      // Resets
+      "ctrl-w left": null,
+      "ctrl-w right": null,
+      "ctrl-w up": null,
+      "ctrl-w down": null,
+      "ctrl-w h": null,
+      "ctrl-w l": null,
+      "ctrl-w k": null,
+      "ctrl-w j": null,
+      "ctrl-w ctrl-h": null,
+      "ctrl-w ctrl-l": null,
+      "ctrl-w ctrl-k": null,
+      "ctrl-w ctrl-j": null,
+      "ctrl-w shift-left": null,
+      "ctrl-w shift-right": null,
+      "ctrl-w shift-up": null,
+      "ctrl-w shift-down": null,
+      "ctrl-w shift-h": null,
+      "ctrl-w shift-l": null,
+      "ctrl-w shift-k": null,
+      "ctrl-w shift-j": null,
+      "ctrl-w g t": null,
+      "ctrl-w ctrl-g t": null,
+      "ctrl-w g shift-t": null,
+      "ctrl-w ctrl-g shift-t": null,
+      "ctrl-w w": null,
+      "ctrl-w ctrl-w": null,
+      "ctrl-w p": null,
+      "ctrl-w ctrl-p": null,
+      "ctrl-w shift-w": null,
+      "ctrl-w ctrl-shift-w": null,
+      "ctrl-w v": null,
+      "ctrl-w ctrl-v": null,
+      "ctrl-w s": null,
+      "ctrl-w shift-s": null,
+      "ctrl-w ctrl-s": null,
+      "ctrl-w c": null,
+      "ctrl-w ctrl-c": null,
+      "ctrl-w q": null,
+      "ctrl-w ctrl-q": null,
+      "ctrl-w o": null,
+      "ctrl-w ctrl-o": null,
+      "ctrl-w n": null,
+      "ctrl-w ctrl-n": null,
+      "ctrl-w d": null,
+      "ctrl-w g d": null,
+      "ctrl-w shift-d": null,
+      "ctrl-w g shift-d": null,
+      "ctrl-w space": null,
+      "ctrl-w g space": null
+    }
+  },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      "shift-j": ["workspace::SendKeystrokes", "j j j j j j j j j j"],
+      "shift-k": ["workspace::SendKeystrokes", "k k k k k k k k k k"]
+    }
+  }
+]
